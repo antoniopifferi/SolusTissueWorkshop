@@ -1,0 +1,6 @@
+Var	View	Col	Row	X	Y	Truth	Line	Ymin	Ymax	Extract1	eVal1
+Mua	inDevice	Volunteer	Tissue	Lambda	Mua		Device	0	0.4		
+Mua	Abdomen	Device	Tissue	Lambda	Mua		Volunteer	0	0.5	Tissue	Abdomen
+Mua	inVolunteer	Tissue	Device	Lambda	Mua		Volunteer	0	0.5		
+Mua	inTissue	Volunteer	Device	Lambda	Mua		Tissue	0	0.5		
+Mua	inDevice2	Tissue	Volunteer	Lambda	Mua		Device	0	0.4		

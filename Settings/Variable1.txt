@@ -10,7 +10,7 @@ Activity	Activity		1
 FileSystName	FileSystName		1	
 FileDataName	FileDataName		1	
 Zone	Tissue		1	
-Lambda	Lambda	nm	1	
+Lambda	Lambda	nm	1	wavelength
 Rho	Rho	cm	1	
-Mua	Mua	$cm^{-1}$	1	
-Mus	Mus	$cm^{-1}$	1	
+Mua	Mua	$cm^{-1}$	1	$\mu_a$
+Mus	Mus	$cm^{-1}$	1	$\mu_s'$
