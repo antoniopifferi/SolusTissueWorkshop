@@ -15,7 +15,7 @@ import matplotlib.ticker as ticker
 close("all")
 
 # PARAMETERS
-PATH_MAIN='C:\\OneDrivePolimi\\OneDrive - Politecnico di Milano\\Beta\\Analysis\\SolusTissue\\'
+PATH_MAIN='C:\\OneDrivePolimi\\OneDrive - Politecnico di Milano\\Beta\\Analysis\\SolusTissueWorkshop\\'
 PATH_DATA='Data\\'
 PATH_RESULTS='Results\\'
 PATH_SETTINGS='Settings\\'
@@ -31,7 +31,7 @@ FILE_VARIABLE='Variable1.txt'
 # FILE_VARIABLE='VariableMeat3.txt'
 
 FIGWIDTH=15
-SAVE_FIG=False
+SAVE_FIG=True
 SUP_TITLE=True
 ASPECT_RATIO=True
 
@@ -49,6 +49,8 @@ dcUnit=dict(zip(Variable.NewVar, Variable.Unit))
 dcLabel=dict(zip(Variable.NewVar, Variable.Label))
 Data.rename(columns=dcVariable,inplace=True)
 Data = Data.merge(Labbook, on='Device')
+
+# FILTER DATA
 
 # CALC VARIABLES
 #Data['bkgMuaTrue']=1/(1+Data['contrMuaTrue'])*Data['incMuaTrue'] # TRUE BKG MUA
@@ -101,4 +103,4 @@ for i,s in Scenario.iterrows(): # iterate over the whole Scenario
             
     figData.tight_layout()
     show()
-    if SAVE_FIG: figData.savefig(PATH_D48+PATH_RESULTS+'Fig_'+str(Name)+'.jpg',format='jpg')
+    if SAVE_FIG: figData.savefig(PATH_MAIN+PATH_RESULTS+'Fig_'+str(Name)+'.jpg',format='jpg')
