@@ -1,0 +1,16 @@
+OldVar	NewVar	Unit	Factor	Label
+Device	Device		1	
+Volunteer	Volunteer		1	
+Gender	Gender		1	
+Age	Age		1	
+Weigth	Weigth	kg	1	
+Height	Height	m	1	
+BMI	BMI	$kg / m^2$	1	
+Activity	Activity		1	
+FileSystName	FileSystName		1	
+FileDataName	FileDataName		1	
+Zone	Tissue		1	
+Lambda	Lambda	nm	1	
+Rho	Rho	cm	1	
+Mua	Mua	$cm^{-1}$	1	
+Mus	Mus	$cm^{-1}$	1	
