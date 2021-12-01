@@ -24,7 +24,9 @@ FILE_DATA='Data1.txt'
 FILE_LABBOOK='Labbook1.txt'
 FILE_SCENARIO='Scenario2.txt'
 FILE_VARIABLE='Variable1.txt'
-FILE_COMPONENTS='Components0.txt'
+FILE_COMPONENTS='Components1.txt'
+FILE_CONCENTRATIONS='ConcentrationsSOLUS1.txt'
+DEVICE_CONCENTRATIONS='SOLUS'
 
 # FILE_DATA='_Meat_FoM_spectral_reconcurves_fromSpectralFit2_.txt'
 # FILE_LABBOOK='LabbookMeat3.txt'
@@ -36,9 +38,10 @@ FILE_COMPONENTS='Components0.txt'
 AcceptVolunteer=[7,8,10]
 AcceptTissue=['Forehead','Deltoid','Abdomen','Calcaneus']
 AcceptRho=[2.6]
+AcceptLambda=arange(630,1100,10)
 
 FIGWIDTH=15
-SAVE_FIG=True
+SAVE_FIG=False
 SUP_TITLE=True
 ASPECT_RATIO=True
 
@@ -61,6 +64,8 @@ Data = Data.merge(Labbook, on='Device')
 Data=Data[Data.Volunteer.isin(AcceptVolunteer)]
 Data=Data[Data.Tissue.isin(AcceptTissue)]
 Data=Data[Data.Rho.isin(AcceptRho)]
+Data=Data[Data.Lambda.isin(AcceptLambda)]
+
 
 # CALC VARIABLES
 #Data['bkgMuaTrue']=1/(1+Data['contrMuaTrue'])*Data['incMuaTrue'] # TRUE BKG MUA
@@ -119,33 +124,37 @@ for i,s in Scenario.iterrows(): # iterate over the whole Scenario
     if SAVE_FIG: figData.savefig(PATH_MAIN+PATH_RESULTS+'Fig_'+str(Name)+'.jpg',format='jpg')
 
 
-# #%% CALC COMPONENTS
-# Components=read_table(PATH_MAIN+PATH_DATA+FILE_COMPONENTS)
-# figure(num='FigComp')
-# Components.plot(x='Lambda')
-# yscale('log')
-# ylim([0,0.5]), title('Components'), xlabel('wavelength (nm)'), ylabel('specific absorption (cm-1)')
-# show()
+#%% CALC COMPONENTS
+Components=read_table(PATH_MAIN+PATH_DATA+FILE_COMPONENTS)
+figure(num='FigComp')
+Components.plot(x='Lambda')
+yscale('log')
+ylim([0,0.5]), title('Components'), xlabel('wavelength (nm)'), ylabel('specific absorption (cm-1)')
+show()
 
-# table=pSpectra.pivot_table(values=Opt,index='Lambda',columns='Subject',aggfunc='mean')
-# comp=Components[Components['Lambda'].isin(pSpectra.Lambda.unique())].values
-# comp=delete(comp,0,1)
-# aComp=linalg.lstsq(comp,table['Mua'],rcond=None)[0] #[0] to extract m-coeff in lstsq
+# gbData=Data.groupby(['Device','Tissue','Volunteer','Lambda'])['Mua']
+# meanVal=gbData.mean()
+table=Data[Data.Device==DEVICE_CONCENTRATIONS].pivot_table(values='Mua',index='Lambda',columns=['Device','Tissue','Volunteer'],aggfunc='mean')
+comp=Components[Components['Lambda'].isin(Data[Data.Device==DEVICE_CONCENTRATIONS].Lambda.unique())].values
+comp=delete(comp,0,1)
+aComp=linalg.lstsq(comp,table,rcond=None)[0] #[0] to extract m-coeff in lstsq
 # y=log(table.loc[LAMBDA1:LAMBDA2,'Mus'])
+#y=log(table.loc[LAMBDA1:LAMBDA2,'Mus'])
 # x=log(y.index/LAMBDA0)
 # model=polyfit(x,y,1)
 # b=-model[0]
 # a=exp(model[1])
 # #A = vstack([x, np.ones(len(x))]).T
-# dfComp=DataFrame(data=aComp.transpose(),columns=Components.columns[1:],index=table.Mua.columns)
-# dfComp['tHb']=dfComp['HHb']+dfComp['O2Hb']
-# dfComp['SO2']=dfComp['O2Hb']/dfComp['tHb']
+dfComp=DataFrame(data=aComp.transpose(),columns=Components.columns[1:],index=table.columns)
+dfComp['tHb']=dfComp['HHb']+dfComp['O2Hb']
+dfComp['SO2']=dfComp['O2Hb']/dfComp['tHb']
+dfComp['Tot']=dfComp['Lipid']+dfComp['H2O']
 # dfComp['Tot']=dfComp['Lipid']+dfComp['H2O']+dfComp['Coll']
-# dfComp['FitComp']='LambdaFit'
+dfComp['FitComp']='LambdaFit'
 # dfComp['a']=a
 # dfComp['b']=b
 # dfComp.plot()
-# dfComp.to_csv(path_or_buf=PATHBETA+PATHANALYSIS+FILECOMPOUT,sep='\t')
+dfComp.to_csv(path_or_buf=PATH_MAIN+PATH_RESULTS+FILE_CONCENTRATIONS,sep='\t')
 # figure(num='FigConc')
 # plot(x,y)
 # #filtData=merge(filtData,dfComp,on=['Subject','Meas','Rho'])
