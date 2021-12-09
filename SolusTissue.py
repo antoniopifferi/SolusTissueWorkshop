@@ -41,8 +41,9 @@ AcceptRho=[2.6]
 AcceptLambda=arange(630,1100,10)
 
 FIGWIDTH=15
-SAVE_FIG=False
-SUP_TITLE=True
+FONT_SIZE=13
+SAVE_FIG=True
+SUP_TITLE=False
 ASPECT_RATIO=True
 
 # LOAD
@@ -72,6 +73,7 @@ Data=Data[Data.Lambda.isin(AcceptLambda)]
 for var,fact in zip(Variable[Variable.Factor>0].NewVar,Variable[Variable.Factor>0].Factor): Data[var]=Data[var]*fact
 
 # PLOT
+matplotlib.rcParams.update({'font.size': FONT_SIZE})
 for i,s in Scenario.iterrows(): # iterate over the whole Scenario
     
     # extract arrays
@@ -88,8 +90,25 @@ for i,s in Scenario.iterrows(): # iterate over the whole Scenario
     nCol=len(aCol)
     aRatio = (nRow+0.5)/(nCol+1) if ASPECT_RATIO else 9/16
     figwidth = FIGWIDTH*0.6 if nCol==3 else FIGWIDTH
-    figData,axs=subplots(nRow,nCol,num='Fig'+str(Name),figsize=(figwidth,aRatio*figwidth),squeeze=False)
+    # figData,axs=subplots(nRow,nCol,num='Fig'+str(Name),figsize=(figwidth,aRatio*figwidth),squeeze=False)
+    figData,axs=subplots(nRow,nCol,num='Fig'+str(Name),sharex=True,sharey=True,figsize=(figwidth,aRatio*figwidth),squeeze=False)
+    subplots_adjust(hspace=0,wspace=0,left=0.09,bottom=0.09)
+#    figData.supxlabel(fontsize=12,fontweight="bold")
+    # figData.supxlabel(x_axis[s]+" ("+units[x_axis[s]]+")",fontsize=12,fontweight="bold")
+# fig.supylabel(y_axis[s]+" ("+units[y_axis[s]]+")",fontsize=12,fontweight="bold")
+# fig.suptitle("%s"%title[s]+"  %s"%page[s]+"=%s"%p,fontsize=12,fontweight = 'bold')            
     if SUP_TITLE: suptitle(FILE_SCENARIO+'  #  '+FILE_DATA+'  #  '+str(Name))
+
+
+# fig,axs = plt.subplots(nrows,ncols,sharex=True,sharey=False,figsize=(width,hieght),squeeze=False)
+# plt.subplots_adjust(hspace=0,wspace=0,left=0.09,bottom=0.09)
+# fig.supxlabel(x_axis[s]+" ("+units[x_axis[s]]+")",fontsize=12,fontweight="bold")
+# fig.supylabel(y_axis[s]+" ("+units[y_axis[s]]+")",fontsize=12,fontweight="bold")
+# fig.suptitle("%s"%title[s]+"  %s"%page[s]+"=%s"%p,fontsize=12,fontweight = 'bold')            
+
+
+
+
     for iCol,oCol in enumerate(aCol):
         for iRow,oRow in enumerate(aRow):
             axi=axs[iRow,iCol]
@@ -114,7 +133,7 @@ for i,s in Scenario.iterrows(): # iterate over the whole Scenario
             # if iCol==0: gca().set_ylabel(yLab)
             # if iRow==(nRow-1): gca().set_xlabel(xLab)           
             # if iRow==0: gca().set_title(cLab)
-            #if iCol==(nCol-1): gca().twinx().set_ylabel(rLab)
+            # if iCol==(nCol-1): gca().twinx().set_ylabel(rLab)
             gca().set_ylabel(yLab)
             gca().set_xlabel(xLab)
  
