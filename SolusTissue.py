@@ -22,7 +22,7 @@ PATH_SETTINGS='Settings\\'
 
 FILE_DATA='Data1.txt'
 FILE_LABBOOK='Labbook1.txt'
-FILE_SCENARIO='Scenario2.txt'
+FILE_SCENARIO='Scenario3.txt'
 FILE_VARIABLE='Variable1.txt'
 FILE_COMPONENTS='Components1.txt'
 FILE_CONCENTRATIONS='ConcentrationsSOLUS1.txt'
@@ -62,8 +62,8 @@ Data.rename(columns=dcVariable,inplace=True)
 Data = Data.merge(Labbook, on='Device')
 
 # FILTER DATA
-Data=Data[Data.Volunteer.isin(AcceptVolunteer)]
-Data=Data[Data.Tissue.isin(AcceptTissue)]
+#Data=Data[Data.Volunteer.isin(AcceptVolunteer)]
+#Data=Data[Data.Tissue.isin(AcceptTissue)]
 Data=Data[Data.Rho.isin(AcceptRho)]
 Data=Data[Data.Lambda.isin(AcceptLambda)]
 
@@ -132,10 +132,10 @@ for i,s in Scenario.iterrows(): # iterate over the whole Scenario
             cLab = (dcLabel[s.Col] if s.Col in dcLabel else s.Col)+"="+str(oCol) + (" "+dcUnit[s.Col] if s.Col in dcUnit else "")    
             # if iCol==0: gca().set_ylabel(yLab)
             # if iRow==(nRow-1): gca().set_xlabel(xLab)           
-            # if iRow==0: gca().set_title(cLab)
-            # if iCol==(nCol-1): gca().twinx().set_ylabel(rLab)
-            gca().set_ylabel(yLab)
-            gca().set_xlabel(xLab)
+            if iRow==0: gca().set_title(cLab)
+            if iCol==(nCol-1): gca().twinx().set_ylabel(rLab)
+            #gca().set_ylabel(yLab)
+            #gca().set_xlabel(xLab)
  
     # SAVE FIGURE        
     figData.tight_layout()
